@@ -1,29 +1,26 @@
-package com.example.tradingbot;
+package com.example.tradingbot.model;
 
 public class Transaction {
-    private String wallet;
     private String token;
-    private int amount;
-    private boolean boughtHero;
+    private boolean processed;
 
-    public Transaction(String wallet, String token, int amount, boolean boughtHero) {
-        this.wallet = wallet;
+    public Transaction(String token, boolean processed) {
         this.token = token;
-        this.amount = amount;
-        this.boughtHero = boughtHero;
-    }
-
-    public String getWallet() {
-        return wallet;
+        this.processed = processed;
     }
 
     public String getToken() {
         return token;
     }
 
-    public int getAmount() {
-        return amount;
+    public boolean isProcessed() {
+        return processed;
     }
+
+    public void setProcessed(boolean processed) {
+        this.processed = processed;
+    }
+}
 
     public boolean isBoughtHero() {
         return boughtHero;
