@@ -16,63 +16,113 @@ import java.io.OutputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 
+/**
+ * TradingApi class handles interactions with the trading platform's API.
+ * It includes methods to buy and sell the HERO token.
+ */
 public class TradingApi {
+
+    // Logger for logging information and error messages
     private static final Logger logger = LoggerFactory.getLogger(TradingApi.class);
 
-    private static final String API_BASE_URL = "https://api.tradingplatform.com"; // Replace with actual trading platform URL
-    private static final String API_KEY = "your_api_key"; // Replace with your actual API key
+    // Base URL of the trading platform's API (Replace with actual URL)
+    private static final String API_BASE_URL = "https://api.tradingplatform.com";
 
+    // API key for authentication (Replace with your actual API key)
+    private static final String API_KEY = "your_api_key";
+
+    /**
+     * Method to buy HERO tokens via the trading platform's API.
+     */
     public void buyHeroToken() {
         try {
+            // Log the action of buying the HERO token
             logger.info("Buying HERO token...");
+
+            // Send a POST request to the /buy endpoint with the token details
             String response = sendPostRequest("/buy", "{ \"token\": \"HERO\" }");
+
+            // Log the response received from the API
             logger.info("Buy response: {}", response);
         } catch (Exception e) {
+            // Log any errors that occur during the process
             logger.error("Failed to buy HERO token: {}", e.getMessage());
         }
     }
 
+    /**
+     * Method to sell HERO tokens via the trading platform's API.
+     */
     public void sellHeroToken() {
         try {
+            // Log the action of selling the HERO token
             logger.info("Selling HERO token...");
+
+            // Send a POST request to the /sell endpoint with the token details
             String response = sendPostRequest("/sell", "{ \"token\": \"HERO\" }");
+
+            // Log the response received from the API
             logger.info("Sell response: {}", response);
         } catch (Exception e) {
+            // Log any errors that occur during the process
             logger.error("Failed to sell HERO token: {}", e.getMessage());
         }
     }
 
+    /**
+     * Helper method to send a POST request to the given endpoint with the provided payload.
+     *
+     * @param endpoint The API endpoint to send the request to.
+     * @param payload  The JSON payload to send in the POST request.
+     * @return The response from the API as a String.
+     * @throws Exception If there is an error during the request.
+     */
     private String sendPostRequest(String endpoint, String payload) throws Exception {
+        // Create a URL object with the full endpoint URL
         URL url = new URL(API_BASE_URL + endpoint);
+
+        // Open an HTTP connection to the URL
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+        // Set the request method to POST
         conn.setRequestMethod("POST");
+
+        // Set the request headers for content type and authorization
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setRequestProperty("Authorization", "Bearer " + API_KEY);
+
+        // Allow the connection to send output (i.e., the request body)
         conn.setDoOutput(true);
 
+        // Write the payload to the output stream
         try (OutputStream os = conn.getOutputStream()) {
             os.write(payload.getBytes());
             os.flush();
         }
 
+        // Get the response code from the API
         int responseCode = conn.getResponseCode();
         logger.info("POST Response Code :: " + responseCode);
 
+        // If the response code is HTTP OK, read the response
         if (responseCode == HttpURLConnection.HTTP_OK) {
             try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
                 String inputLine;
                 StringBuilder response = new StringBuilder();
 
+                // Read the response line by line
                 while ((inputLine = in.readLine()) != null) {
                     response.append(inputLine);
                 }
                 return response.toString();
             }
         } else {
+            // Throw an exception if the response code is not HTTP OK
             throw new RuntimeException("Failed : HTTP error code : " + responseCode);
         }
     }
 }
+
 
 Explanation
 •	API_BASE_URL: The main URL of the trading platform's API.
