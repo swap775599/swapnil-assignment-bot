@@ -1,0 +1,83 @@
+// it's only for explanation ,not neccessary. 
+
+Example Implementation for the actual working with api/platform.
+
+This example shows how to connect to a trading platform. You need to change the placeholders to the actual API calls for the platform you are using.
+
+
+Java : 
+package com.example.tradingbot;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.io.OutputStream;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
+
+public class TradingApi {
+    private static final Logger logger = LoggerFactory.getLogger(TradingApi.class);
+
+    private static final String API_BASE_URL = "https://api.tradingplatform.com"; // Replace with actual trading platform URL
+    private static final String API_KEY = "your_api_key"; // Replace with your actual API key
+
+    public void buyHeroToken() {
+        try {
+            logger.info("Buying HERO token...");
+            String response = sendPostRequest("/buy", "{ \"token\": \"HERO\" }");
+            logger.info("Buy response: {}", response);
+        } catch (Exception e) {
+            logger.error("Failed to buy HERO token: {}", e.getMessage());
+        }
+    }
+
+    public void sellHeroToken() {
+        try {
+            logger.info("Selling HERO token...");
+            String response = sendPostRequest("/sell", "{ \"token\": \"HERO\" }");
+            logger.info("Sell response: {}", response);
+        } catch (Exception e) {
+            logger.error("Failed to sell HERO token: {}", e.getMessage());
+        }
+    }
+
+    private String sendPostRequest(String endpoint, String payload) throws Exception {
+        URL url = new URL(API_BASE_URL + endpoint);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("Authorization", "Bearer " + API_KEY);
+        conn.setDoOutput(true);
+
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(payload.getBytes());
+            os.flush();
+        }
+
+        int responseCode = conn.getResponseCode();
+        logger.info("POST Response Code :: " + responseCode);
+
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+                String inputLine;
+                StringBuilder response = new StringBuilder();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                return response.toString();
+            }
+        } else {
+            throw new RuntimeException("Failed : HTTP error code : " + responseCode);
+        }
+    }
+}
+
+Explanation
+•	API_BASE_URL: The main URL of the trading platform's API.
+•	API_KEY: Your key to authenticate with the trading platform.
+•	sendPostRequest: A helper method to send a POST request to the API.
+•	buyHeroToken and sellHeroToken: Methods to send a POST request to buy or sell the HERO token.
+Real Implementation Replace API_BASE_URL, API_KEY, and endpoints (/buy and /sell) with the real values from your trading platform's API documentation. Make sure the platform supports the actions you're doing and handle responses and errors as they suggest.
+
