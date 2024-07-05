@@ -40,5 +40,8 @@ This project implements a trading bot that monitors specific cryptocurrency wall
 - **Continuous Monitoring**: Regularly monitor the bot's activity and performance to make adjustments as needed based on market conditions and trading outcomes.
 
 ## Support
-For any issues or questions, please contact the project maintainer.
+For any issues or questions, please contact the project maintainer
+Swapnil Raibole 
++91-9322010868
+swapnilraibole107@gmail.com
 
