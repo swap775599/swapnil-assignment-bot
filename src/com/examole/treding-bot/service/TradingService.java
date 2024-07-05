@@ -17,6 +17,9 @@ public class TradingService {
         this.lastCheckTime = System.currentTimeMillis();
     }
 
+    /**
+     * Starts the trading bot.
+     */
     public void startBot() {
         System.out.println("Starting the trading bot...");
 
@@ -42,6 +45,9 @@ public class TradingService {
         }
     }
 
+    /**
+     * Updates the tracked wallets by fetching new wallets trading HERO.
+     */
     private void updateTrackedWallets() {
         List<String> newWallets = Utils.fetchNewHeroTokenWallets();
         for (String wallet : newWallets) {
@@ -52,6 +58,9 @@ public class TradingService {
         }
     }
 
+    /**
+     * Processes transactions for tracked wallets, buying and selling HERO tokens based on transaction types.
+     */
     private void processWalletTransactions() {
         for (String wallet : trackedWallets) {
             List<Transaction> transactions = Utils.fetchTransactions(wallet);
@@ -79,6 +88,12 @@ public class TradingService {
         }
     }
 
+    /**
+     * Simulates buying HERO token for a wallet.
+     *
+     * @param wallet Wallet address for which HERO token is to be bought
+     * @return true if buying is successful, false otherwise
+     */
     private boolean buyHeroToken(String wallet) {
         // Implement the logic to buy HERO token here
         System.out.println("Buying HERO token for wallet: " + wallet);
@@ -86,6 +101,12 @@ public class TradingService {
         return true;
     }
 
+    /**
+     * Simulates selling HERO token for a wallet.
+     *
+     * @param wallet Wallet address for which HERO token is to be sold
+     * @return true if selling is successful, false otherwise
+     */
     private boolean sellHeroToken(String wallet) {
         // Implement the logic to sell HERO token here
         System.out.println("Selling HERO token for wallet: " + wallet);
